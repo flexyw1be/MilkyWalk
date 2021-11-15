@@ -1,9 +1,5 @@
 import pygame
-import Player
-import config
-from Window import Window
-from utilities import *
+from window import Window
 
-if __name__ == "__main__":
-    game = Window()
-    game.run()
+game = Window()
+game.run()

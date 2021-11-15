@@ -1,10 +1,9 @@
 import pygame
-from config import *
 from utilities import *
-from Player import Player
+from player import Player
 
 
-class Window():
+class Window:
     def __init__(self):
         pygame.init()
 
@@ -14,6 +13,7 @@ class Window():
         self.all_blocks = pygame.sprite.Group()
         self.player = Player()
         self.player.add(self.all_blocks)
+        self.bullet_group = pygame.sprite.Group()
 
     def run(self):
         self.running = True
@@ -27,6 +27,18 @@ class Window():
                         self.running = False
 
             self.screen.blit(self.back, (0, 0))
-            # self.all_blocks.draw(self.screen)
+            self.set_bullet_group()
+            self.all_blocks.update()
+            self.all_blocks.draw(self.screen)
 
             pygame.display.flip()
+
+    def set_bullet_group(self):
+        self.bullet_group = self.player.get_bullet_group()
+        for i in self.bullet_group:
+            i.add(self.all_blocks)
+
+
+
+game = Window()
+game.run()

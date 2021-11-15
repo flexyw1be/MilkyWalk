@@ -6,3 +6,6 @@ WIN_SIZE = pygame.Rect(0, 0, TILE * 20, TILE * 14)
 BACKGROUND = 'data/back.png'
 PLAYER_IDLE = 'data/1.png'
 PLAYER_SIZE = (152, 152)
+PLAYER_SPEED = 1
+BULLET = 'data/bullet.png'
+BULLET_SPEED = 2
