@@ -14,6 +14,8 @@ class Window:
         self.player = Player()
         self.player.add(self.all_blocks)
         self.bullet_group = pygame.sprite.Group()
+        self.clock = pygame.time.Clock()
+        self.bombs_group = pygame.sprite.Group()
 
     def run(self):
         self.running = True
@@ -28,9 +30,10 @@ class Window:
 
             self.screen.blit(self.back, (0, 0))
             self.set_bullet_group()
+            self.set_bombs_group()
             self.all_blocks.update()
             self.all_blocks.draw(self.screen)
-
+            self.clock.tick(FPS)
             pygame.display.flip()
 
     def set_bullet_group(self):
@@ -38,6 +41,10 @@ class Window:
         for i in self.bullet_group:
             i.add(self.all_blocks)
 
+    def set_bombs_group(self):
+        self.bombs_group = self.player.get_bombs_group()
+        for i in self.bombs_group:
+            i.add(self.all_blocks)
 
 
 game = Window()

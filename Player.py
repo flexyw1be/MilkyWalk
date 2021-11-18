@@ -2,6 +2,7 @@ import pygame
 from config import *
 from utilities import *
 from bullet import Bullet
+from bomb import Bomb
 
 
 class Player(pygame.sprite.Sprite):
@@ -13,7 +14,9 @@ class Player(pygame.sprite.Sprite):
         self.money, self.bombs, self.keys = 0, 1, 0
         self.clock = pygame.time.Clock()
         self.time = self.clock.tick()
+        self.bullet_time = 0
         self.bullet_group = pygame.sprite.Group()
+        self.bombs_group = pygame.sprite.Group()
 
         self.hp = 100
 
@@ -41,13 +44,11 @@ class Player(pygame.sprite.Sprite):
         right_shoot, left_shoot = keys[pygame.K_RIGHT], keys[pygame.K_LEFT]
         if any([down_shoot, up_shoot, right_shoot, left_shoot]):
             self.shoot(down_shoot, up_shoot, right_shoot, left_shoot)
+        set_bomb = keys[pygame.K_e]
+        if set_bomb:
+            self.set_bomb()
 
     def shoot(self, down_shoot, up_shoot, right_shoot, left_shoot):
-        time = self.clock.tick()
-        if self.time - time < 250:
-            self.time = time
-            return
-        self.time = time
         coords = self.rect.centerx, self.rect.centery
         if down_shoot:
             bullet = Bullet(coords, 0, BULLET_SPEED, 1)
@@ -59,6 +60,10 @@ class Player(pygame.sprite.Sprite):
             bullet = Bullet(coords, -BULLET_SPEED, 0, 1)
         self.bullet_group.add(bullet)
         print(bullet)
+
+    def set_bomb(self):
+        coords = self.rect.centerx, self.rect.centery
+        self.bombs_group.add(Bomb(self.rect.centerx, self.rect.centery, 1))
 
     def get_hp(self):
         return self.hp
@@ -74,3 +79,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_bullet_group(self):
         return self.bullet_group
+
+    def get_bombs_group(self):
+        return self.bombs_group
+
