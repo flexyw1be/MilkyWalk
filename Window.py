@@ -1,6 +1,7 @@
 import pygame
 from utilities import *
 from player import Player
+from enemy import Enemy
 
 
 class Window:
@@ -16,9 +17,9 @@ class Window:
         self.bullet_group = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
         self.bombs_group = pygame.sprite.Group()
+        self.running = True
 
     def run(self):
-        self.running = True
         while self.running:
             events = pygame.event.get()
             for event in events:
@@ -47,5 +48,3 @@ class Window:
             i.add(self.all_blocks)
 
 
-game = Window()
-game.run()
