@@ -6,9 +6,9 @@ from utilities import *
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, cooords, vx, vy, affiliation):
+    def __init__(self, coords, vx, vy, affiliation):
         pygame.sprite.Sprite.__init__(self)
-        self.rect = pygame.Rect(cooords, PLAYER_SIZE)
+        self.rect = pygame.Rect(coords, PLAYER_SIZE)
         self.image = image_load(BULLET, (32, 32))
         self.affination = affiliation
         self.vx, self.vy = vx, vy
