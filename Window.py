@@ -2,6 +2,7 @@ import pygame
 from utilities import *
 from player import Player
 from enemy import Enemy
+from block import Block
 
 
 class Window:
@@ -18,8 +19,13 @@ class Window:
         self.clock = pygame.time.Clock()
         self.bombs_group = pygame.sprite.Group()
         self.running = True
+        self.enemy = Enemy('data/bee.png', 100)
+        self.enemies = pygame.sprite.Group()
+        self.enemy.add(self.enemies)
+        self.map = SPAWN_MAP
 
     def run(self):
+        self.load_map()
         while self.running:
             events = pygame.event.get()
             for event in events:
@@ -34,6 +40,8 @@ class Window:
             self.set_bombs_group()
             self.all_blocks.update()
             self.all_blocks.draw(self.screen)
+            self.enemies.update(self.player)
+            self.enemies.draw(self.screen)
             self.clock.tick(FPS)
             pygame.display.flip()
 
@@ -47,4 +55,17 @@ class Window:
         for i in self.bombs_group:
             i.add(self.all_blocks)
 
-
+    def load_map(self):
+        self.player.money = 0
+        self.all_blocks.empty()
+        self.player.add(self.all_blocks)
+        with open(self.map, 'r', encoding='utf-8') as file:
+            for y, line in enumerate(file):
+                for x, letter in enumerate(line):
+                    coord = x * TILE, y * TILE
+                    if letter == 'D':
+                        block = Block(DOOR_X, coord)
+                        block.add(self.all_blocks)
+                    if letter == 'M':
+                        block = Block(DOOR_Y, coord)
+                        block.add(self.all_blocks)
