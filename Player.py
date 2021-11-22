@@ -61,6 +61,8 @@ class Player(pygame.sprite.Sprite):
             self.bombs_time = time.time()
             self.set_bomb()
 
+        self.check_hp(self.hp)
+
     def shoot(self, down_shoot, up_shoot, right_shoot, left_shoot):
         coords = self.rect.centerx, self.rect.centery
         if down_shoot:
@@ -74,11 +76,17 @@ class Player(pygame.sprite.Sprite):
         self.bullet_group.add(bullet)
 
     def set_bomb(self):
-        coords = self.rect.centerx, self.rect.centery
         self.bombs_group.add(Bomb(self.rect.centerx, self.rect.centery, 1))
 
     def get_hp(self):
         return self.hp
+
+    def check_hp(self, hp):
+        if hp <= 0:
+            self.kill()
+
+    def get_dmg(self, dmg):
+        self.hp -= dmg
 
     def get_money(self):
         return self.money

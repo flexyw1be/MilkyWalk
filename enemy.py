@@ -30,14 +30,14 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += self.vx
         self.rect.y += self.vy
 
-        collided_blocks = pygame.sprite.spritecollide(self, player.bullet_group, False)
-        if collided_blocks and time.time() - self.time > 0.5:
-            self.time = time.time()
-            self.hp -= 12.5
-            for i in collided_blocks:
-                i.kill()
 
         if self.hp <= 0:
             self.kill()
+
+    def get_dmg(self, dmg):
+        self.hp -= dmg
+
+    def get_hp(self):
+        return self.hp
 
 

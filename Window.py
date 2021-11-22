@@ -15,6 +15,8 @@ class Window:
         self.all_blocks = pygame.sprite.Group()
         self.player = Player()
         self.player.add(self.all_blocks)
+        self.heroes = pygame.sprite.Group()
+        self.player.add(self.heroes)
         self.bullet_group = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
         self.bombs_group = pygame.sprite.Group()
@@ -22,10 +24,11 @@ class Window:
         self.enemy = Enemy('data/bee.png', 100)
         self.enemies = pygame.sprite.Group()
         self.enemy.add(self.enemies)
+
         self.map = SPAWN_MAP
 
     def run(self):
-        self.load_map()
+        # self.load_map()
         while self.running:
             events = pygame.event.get()
             for event in events:
@@ -36,24 +39,28 @@ class Window:
                         self.running = False
 
             self.screen.blit(self.back, (0, 0))
+            for i in self.enemies:
+                i.add(self.heroes)
             self.set_bullet_group()
             self.set_bombs_group()
             self.all_blocks.update()
-            self.all_blocks.draw(self.screen)
             self.enemies.update(self.player)
+            self.bombs_group.update(self.heroes, self.bullet_group)
+            self.bullet_group.update(self.enemies)
+
+            self.all_blocks.draw(self.screen)
+            self.bombs_group.draw(self.screen)
+            self.bullet_group.draw(self.screen)
             self.enemies.draw(self.screen)
+
             self.clock.tick(FPS)
             pygame.display.flip()
 
     def set_bullet_group(self):
         self.bullet_group = self.player.get_bullet_group()
-        for i in self.bullet_group:
-            i.add(self.all_blocks)
 
     def set_bombs_group(self):
         self.bombs_group = self.player.get_bombs_group()
-        for i in self.bombs_group:
-            i.add(self.all_blocks)
 
     def load_map(self):
         self.player.money = 0
