@@ -11,7 +11,7 @@ class Window:
 
         self.screen = pygame.display.set_mode((WIN_SIZE.width, WIN_SIZE.height))
         self.running = True
-        self.back = image_load(BACKGROUND, (WIN_SIZE.width, WIN_SIZE.height))
+        self.back = image_load(BACKGROUND, (GAME_SIZE.width + TILE * 2, GAME_SIZE.height + TILE * 2))
         self.all_blocks = pygame.sprite.Group()
         self.player = Player()
         self.player.add(self.all_blocks)
@@ -21,14 +21,14 @@ class Window:
         self.clock = pygame.time.Clock()
         self.bombs_group = pygame.sprite.Group()
         self.running = True
-        self.enemy = Enemy('data/bee.png', 100)
         self.enemies = pygame.sprite.Group()
-        self.enemy.add(self.enemies)
+        self.player_group = pygame.sprite.Group()
+        self.player.add(self.player_group)
 
-        self.map = SPAWN_MAP
+        self.map = SPAWN_ROOM
 
     def run(self):
-        # self.load_map()
+        self.load_map()
         while self.running:
             events = pygame.event.get()
             for event in events:
@@ -44,7 +44,7 @@ class Window:
             self.set_bullet_group()
             self.set_bombs_group()
             self.all_blocks.update()
-            self.enemies.update(self.player)
+            self.enemies.update(self.player, self.player_group)
             self.bombs_group.update(self.heroes, self.bullet_group)
             self.bullet_group.update(self.enemies)
 
@@ -70,9 +70,11 @@ class Window:
             for y, line in enumerate(file):
                 for x, letter in enumerate(line):
                     coord = x * TILE, y * TILE
-                    if letter == 'D':
-                        block = Block(DOOR_X, coord)
+                    if letter == 'S':
+                        block = Block(STONE, coord)
                         block.add(self.all_blocks)
-                    if letter == 'M':
-                        block = Block(DOOR_Y, coord)
-                        block.add(self.all_blocks)
+                    if letter == 'P':
+                        self.player.rect.x, self.player.rect.y = coord
+                    if letter == 'E':
+                        enemy = Enemy(coord, ENEMY_IDLE, 100)
+                        self.enemies.add(enemy)

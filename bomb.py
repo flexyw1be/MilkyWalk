@@ -23,13 +23,13 @@ class Bomb(pygame.sprite.Sprite):
             elif i.vy < 0:
                 self.rect.y -= TILE
             elif i.vx > 0:
-                self.rect.x += TILE 
+                self.rect.x += TILE
             elif i.vx < 0:
                 self.rect.x -= TILE
             i.kill()
         if time.time() - self.time > 3:
             collided_blocks = pygame.sprite.spritecollide(self, enemies, False)
             for i in collided_blocks:
-                i.get_dmg(100)
+                i.get_dmg(BOMB_DMG)
 
             self.kill()
