@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.hp = 100
         self.damage = 25
 
-    def update(self):
+    def update(self, hard_blocks):
         keys = pygame.key.get_pressed()
         left = keys[pygame.K_a]
         right = keys[pygame.K_d]
@@ -32,6 +32,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.vx = 0
         self.rect.x += self.vx
+        collided_blocks = pygame.sprite.spritecollide(self, hard_blocks, False)
+        for i in collided_blocks:
+            if self.vx > 0:
+                self.rect.right = i.rect.left
+                self.vx = 0
+            elif self.vx < 0:
+                self.rect.left = i.rect.right
+                self.vx = 0
+
         if not self.rect.left > GAME_SIZE.left + TILE:
             self.rect.left = GAME_SIZE.left + TILE
         if not self.rect.right < GAME_SIZE.right - TILE:
@@ -45,6 +54,16 @@ class Player(pygame.sprite.Sprite):
         else:
             self.vy = 0
         self.rect.y += self.vy
+
+        collided_blocks = pygame.sprite.spritecollide(self, hard_blocks, False)
+        for i in collided_blocks:
+            if self.vy > 0:
+                self.rect.bottom = i.rect.top
+                self.vy = 0
+            elif self.vy < 0:
+                self.vy = 0
+                self.rect.top = i.rect.bottom
+
         if not self.rect.top > GAME_SIZE.top + TILE:
             self.rect.top = GAME_SIZE.top + TILE
         if not self.rect.bottom < GAME_SIZE.bottom - TILE:
@@ -66,13 +85,13 @@ class Player(pygame.sprite.Sprite):
     def shoot(self, down_shoot, up_shoot, right_shoot, left_shoot):
         coords = self.rect.centerx, self.rect.centery
         if down_shoot:
-            bullet = Bullet(coords, 0, BULLET_SPEED, 1)
+            bullet = Bullet(coords, 0, BULLET_SPEED, self)
         if up_shoot:
-            bullet = Bullet(coords, 0, -BULLET_SPEED, 1)
+            bullet = Bullet(coords, 0, -BULLET_SPEED, self)
         if right_shoot:
-            bullet = Bullet(coords, BULLET_SPEED, 0, 1)
+            bullet = Bullet(coords, BULLET_SPEED, 0, self)
         if left_shoot:
-            bullet = Bullet(coords, -BULLET_SPEED, 0, 1)
+            bullet = Bullet(coords, -BULLET_SPEED, 0, self)
         self.bullet_group.add(bullet)
 
     def set_bomb(self):

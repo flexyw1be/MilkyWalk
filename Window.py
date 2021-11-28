@@ -14,7 +14,6 @@ class Window:
         self.back = image_load(BACKGROUND, (GAME_SIZE.width + TILE * 2, GAME_SIZE.height + TILE * 2))
         self.all_blocks = pygame.sprite.Group()
         self.player = Player()
-        self.player.add(self.all_blocks)
         self.heroes = pygame.sprite.Group()
         self.player.add(self.heroes)
         self.bullet_group = pygame.sprite.Group()
@@ -24,6 +23,18 @@ class Window:
         self.enemies = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.player.add(self.player_group)
+        self.hp_images = {
+            "100hp": 'data/fullhp.png',
+            "87hp": 'data/87hp.png',
+            "65hp": 'data/65hp.png',
+            "50hp": 'data/50hp.png',
+            "37hp": 'data/37hp.png',
+            "25hp": 'data/25hp.png',
+            "12hp": 'data/12hp.png',
+            '75hp': 'data/75hp.png'
+
+        }
+        self.hp_hud = image_load(self.hp_images['100hp'], (TILE * 4, TILE))
 
         self.map = SPAWN_ROOM
 
@@ -39,16 +50,20 @@ class Window:
                         self.running = False
 
             self.screen.blit(self.back, (0, 0))
+            self.screen.blit(self.hp_hud, (0, 0))
+            self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
             for i in self.enemies:
                 i.add(self.heroes)
             self.set_bullet_group()
             self.set_bombs_group()
             self.all_blocks.update()
+            self.player.update(self.all_blocks)
             self.enemies.update(self.player, self.player_group)
             self.bombs_group.update(self.heroes, self.bullet_group)
-            self.bullet_group.update(self.enemies)
+            self.bullet_group.update(self.enemies, self.player)
 
             self.all_blocks.draw(self.screen)
+            self.player_group.draw(self.screen)
             self.bombs_group.draw(self.screen)
             self.bullet_group.draw(self.screen)
             self.enemies.draw(self.screen)
@@ -65,7 +80,7 @@ class Window:
     def load_map(self):
         self.player.money = 0
         self.all_blocks.empty()
-        self.player.add(self.all_blocks)
+
         with open(self.map, 'r', encoding='utf-8') as file:
             for y, line in enumerate(file):
                 for x, letter in enumerate(line):
