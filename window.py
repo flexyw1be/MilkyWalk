@@ -51,7 +51,8 @@ class Window:
 
             self.screen.blit(self.back, (0, 0))
             self.screen.blit(self.hp_hud, (0, 0))
-            self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
+            if self.player.get_hp() > 0:
+                self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
             for i in self.enemies:
                 i.add(self.heroes)
             self.set_bullet_group()
@@ -59,7 +60,7 @@ class Window:
             self.all_blocks.update()
             self.player.update(self.all_blocks)
             self.enemies.update(self.player, self.player_group)
-            self.bombs_group.update(self.heroes, self.bullet_group)
+            self.bombs_group.update(self.heroes, self.bullet_group, self.all_blocks)
             self.bullet_group.update(self.enemies, self.player)
 
             self.all_blocks.draw(self.screen)

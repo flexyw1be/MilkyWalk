@@ -34,9 +34,9 @@ class Enemy(pygame.sprite.Sprite):
         for i in collided_players:
             i.get_dmg(ENEMY_DMG)
             self.kill()
-        if time.time() - self.time > 0.6:
-            self.time = time.time()
-            self.shoot(player)
+        # if time.time() - self.time > 0.6:
+        #     self.time = time.time()
+        #     self.shoot(player)
         if self.hp <= 0:
             self.kill()
 

@@ -6,8 +6,8 @@ WIN_SIZE = pygame.Rect(0, 0, TILE * 20, TILE * 14)
 GAME_SIZE = pygame.Rect(TILE, TILE, TILE * 18, TILE * 12)
 
 BACKGROUND = 'data/back.png'
-PLAYER_IDLE = 'data/1.png'
-ENEMY_IDLE = 'data/fly_l.png'
+PLAYER_IDLE = 'data/1.jpg'
+ENEMY_IDLE = 'data/sider.png'
 ENEMY_DMG = 25
 ENEMY_SPEED = 0.2
 PLAYER_SIZE = (128, 128)
