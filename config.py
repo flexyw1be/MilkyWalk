@@ -6,24 +6,25 @@ WIN_SIZE = pygame.Rect(0, 0, TILE * 20, TILE * 14)
 GAME_SIZE = pygame.Rect(TILE, TILE, TILE * 18, TILE * 12)
 
 BACKGROUND = 'data/back.png'
-PLAYER_IDLE = 'data/1.png'
-ENEMY_IDLE = 'data/fly_l.png'
+PLAYER_IDLE = 'data/player.png'
+ENEMY_IDLE = 'data/spider.png'
 ENEMY_DMG = 25
 ENEMY_SPEED = 0.2
-PLAYER_SIZE = (128, 128)
+PLAYER_SIZE = (TILE * 2, TILE * 2)
 PLAYER_SPEED = 5
 BOMB = 'data/bomb.png'
 BULLET = 'data/bullet.png'
 STONE = 'data/tile_0047.png'
-CHEST = ''
+CHEST = 'data/chest.png'
 HEAP = ''
-BULLET_SPEED = 8
+BULLET_SPEED = 10
 FPS = 120
 BULLET_DMG = 15
 BOMB_DMG = 50
 DOOR_X, DOOR_Y = 0, 0
 SPAWN_ROOM = 'rooms/spawn_room.txt'
 BOSS_ROOM = 'rooms/boss_room.txt'
+
 LIST = [SPAWN_ROOM]
 for i in range(6):
     LIST.append(f'rooms/room{i}.txt')

@@ -34,7 +34,22 @@ class Window:
             '75hp': 'data/75hp.png'
 
         }
+
+        self.counts_images = {
+            '1': image_load('data/1.png'),
+            '2': image_load('data/2.png'),
+            '3': image_load('data/3.png'),
+            '4': image_load('data/4.png'),
+            '5': image_load('data/5.png'),
+            '6': image_load('data/6.png'),
+            '7': image_load('data/7.png'),
+            '8': image_load('data/8.png'),
+            '9': image_load('data/9.png'),
+            '0': image_load('data/0.png')
+
+        }
         self.hp_hud = image_load(self.hp_images['100hp'], (TILE * 4, TILE))
+        self.bomb = image_load(BOMB)
 
         self.map = SPAWN_ROOM
 
@@ -51,16 +66,20 @@ class Window:
 
             self.screen.blit(self.back, (0, 0))
             self.screen.blit(self.hp_hud, (0, 0))
-            self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
+            self.screen.blit(self.bomb, (30, 60))
+            self.screen.blit(self.counts_images[f'{self.player.bombs}'], (90, 60))
+            # se
+            if self.player.get_hp() > 0:
+                self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
             for i in self.enemies:
                 i.add(self.heroes)
             self.set_bullet_group()
             self.set_bombs_group()
             self.all_blocks.update()
             self.player.update(self.all_blocks)
-            self.enemies.update(self.player, self.player_group)
-            self.bombs_group.update(self.heroes, self.bullet_group)
-            self.bullet_group.update(self.enemies, self.player)
+            self.enemies.update(self.player, self.player_group, self.all_blocks)
+            self.bombs_group.update(self.heroes, self.bullet_group, self.all_blocks)
+            self.bullet_group.update(self.enemies, self.player, self.all_blocks)
 
             self.all_blocks.draw(self.screen)
             self.player_group.draw(self.screen)
@@ -93,3 +112,6 @@ class Window:
                     if letter == 'E':
                         enemy = Enemy(coord, ENEMY_IDLE, 100)
                         self.enemies.add(enemy)
+                    if letter == 'C':
+                        block = Block(CHEST, coord)
+                        block.add(self.all_blocks)

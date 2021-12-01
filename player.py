@@ -10,7 +10,13 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Rect((0, 0), PLAYER_SIZE)
-        self.image = image_load(PLAYER_IDLE, PLAYER_SIZE)
+        self.images = {
+            'idle': image_load('data/player_idle.png', PLAYER_SIZE),
+            'right': image_load('data/player_r.png', PLAYER_SIZE),
+            'left': image_load('data/player_l.png', PLAYER_SIZE),
+            'up': image_load('data/player_up.png', PLAYER_SIZE),
+        }
+        self.image = self.images['idle']
         self.vx, self.vy = 0, 0
         self.money, self.bombs, self.keys = 0, 1, 0
         self.clock = pygame.time.Clock()
@@ -19,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_group = pygame.sprite.Group()
         self.bombs_group = pygame.sprite.Group()
         self.hp = 100
+        self.bombs = 2
         self.damage = 25
 
     def update(self, hard_blocks):
@@ -32,6 +39,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.vx = 0
         self.rect.x += self.vx
+        self.image = self.images['idle']
+
         collided_blocks = pygame.sprite.spritecollide(self, hard_blocks, False)
         for i in collided_blocks:
             if self.vx > 0:
@@ -54,6 +63,12 @@ class Player(pygame.sprite.Sprite):
         else:
             self.vy = 0
         self.rect.y += self.vy
+        if self.vy <0:
+            self.image = self.images['up']
+        elif self.vx > 0:
+            self.image = self.images['right']
+        elif self.vx < 0:
+            self.image = self.images['left']
 
         collided_blocks = pygame.sprite.spritecollide(self, hard_blocks, False)
         for i in collided_blocks:
@@ -76,9 +91,10 @@ class Player(pygame.sprite.Sprite):
             self.bullets_time = time.time()
             self.shoot(down_shoot, up_shoot, right_shoot, left_shoot)
         set_bomb = keys[pygame.K_e]
-        if set_bomb and time.time() - self.bombs_time > 0.5:
+        if set_bomb and time.time() - self.bombs_time > 0.5 and self.bombs:
             self.bombs_time = time.time()
             self.set_bomb()
+            self.bombs -=1
 
         self.check_hp(self.hp)
 

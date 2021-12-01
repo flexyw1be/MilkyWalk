@@ -23,7 +23,7 @@ class Bomb(pygame.sprite.Sprite):
         self.i = 0
         self.boom = False
 
-    def update(self, enemies, bullets):
+    def update(self, enemies, bullets, blocks):
         collided_blocks = pygame.sprite.spritecollide(self, bullets, False)
         for i in collided_blocks:
             if i.vy > 0:
@@ -42,6 +42,12 @@ class Bomb(pygame.sprite.Sprite):
             self.current_time = time.time()
             self.time = time.time()
             self.boom = True
+            collided_blocks = pygame.sprite.spritecollide(bomb, blocks, False)
+            for i in collided_blocks:
+                i.set_hp(i.get_hp() - BOMB_DMG)
+            collided_enemies = pygame.sprite.spritecollide(bomb, enemies, False)
+            for i in collided_enemies:
+                i.get_dmg(BOMB_DMG)
 
         if time.time() - self.current_time > 0.5 and self.boom:
             self.kill()
@@ -49,6 +55,5 @@ class Bomb(pygame.sprite.Sprite):
             #     if bomb.check_collide(i):
             #         i.get_dmg(BOMB_DMG)
             #         self.kill()
-
 
             # self.kill()
