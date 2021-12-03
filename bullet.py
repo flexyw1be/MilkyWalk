@@ -16,6 +16,11 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self, heroes, player, blocks):
         self.rect.x += self.vx
+        if not GAME_SIZE.x + TILE < self.rect.x < GAME_SIZE.right - TILE or not TILE * 2 < self.rect.y < TILE * 12:
+            self.kill()
+        # if not TILE * 2 < self.rect.y < TILE * 12:
+        #     self.kill()
+
         self.rect.y += self.vy
         if not GAME_SIZE.x + TILE < self.rect.x < GAME_SIZE.right - TILE or not TILE * 2 < self.rect.y < TILE * 12:
             self.kill()
@@ -30,3 +35,4 @@ class Bullet(pygame.sprite.Sprite):
             if i != self.affination:
                 i.get_dmg(BULLET_DMG)
                 self.kill()
+
