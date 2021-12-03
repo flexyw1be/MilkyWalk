@@ -14,12 +14,19 @@ class Bullet(pygame.sprite.Sprite):
         self.vx, self.vy = vx, vy
         self.time = time.time()
 
-    def update(self, heroes, player):
+    def update(self, heroes, player, blocks):
         self.rect.x += self.vx
         self.rect.y += self.vy
+        if not GAME_SIZE.x + TILE < self.rect.x < GAME_SIZE.right - TILE or not TILE * 2 < self.rect.y < TILE * 12:
+            self.kill()
+        # if not TILE * 2 < self.rect.y < TILE * 12:
+        #     self.kill()
+        # collided_blocks = pygame.sprite.spritecollide(self, blocks, False)
+        # for i in collided_blocks:
+        #     self.kill()
 
-        collided_blocks = pygame.sprite.spritecollide(self, heroes, False)
-        for i in collided_blocks:
+        collided_heroes = pygame.sprite.spritecollide(self, heroes, False)
+        for i in collided_heroes:
             if i != self.affination:
                 i.get_dmg(BULLET_DMG)
                 self.kill()
