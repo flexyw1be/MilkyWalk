@@ -3,6 +3,7 @@ from utilities import *
 from player import Player
 from bullet import Bullet
 import time
+from buff import Buff
 
 ANIM_SPEED = 6
 
@@ -16,12 +17,16 @@ class Enemy(pygame.sprite.Sprite):
         self.hp = hp
         self.vx, self.vy = 0, 0
         self.dv = ENEMY_SPEED
+        self.name = 'enemy'
         self.time = time.time()
-        self.radius = 5 * TILE
+        self.radius = 0
+        self.die = False
+        self.cd_time = 0
 
-    def update(self, player, player_group, blocks):
+    def update(self, player, player_group, blocks, buffs, screen):
         if self.hp == SPIDER_HP:
             return
+        self.radius = 5 * TILE
         if pygame.sprite.collide_circle(self, player):
             self.move_x(player)
             self.check_collide_x(blocks, player_group, player)
@@ -30,9 +35,11 @@ class Enemy(pygame.sprite.Sprite):
 
         else:
             self.vx, self.vy = 0, 0
-        if pygame.sprite.spritecollide(self, player_group, False):
+        self.radius = 0
+        if time.time() - self.cd_time > 1 and pygame.sprite.spritecollide(self, player_group, False):
+            self.time = time.time()
             player.get_dmg(ENEMY_DMG)
-            self.kill()
+            # self.kill()
 
         # self.check_collides(blocks, player_group, player)
 
@@ -42,6 +49,9 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.hp <= 0:
             self.kill()
+            if get_percentages(100):
+                buff = Buff(self.rect.x, self.rect.y)
+                buffs.add(buff)
 
     def get_dmg(self, dmg):
         self.hp -= dmg
@@ -91,3 +101,6 @@ class Enemy(pygame.sprite.Sprite):
 
         bullet = Bullet(coord, vx, vy, self)
         player.bullet_group.add(bullet)
+
+    def set_radius(self, radius):
+        self.radius = radius

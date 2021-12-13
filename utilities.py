@@ -1,5 +1,6 @@
 import pygame
 from config import *
+from random import randint
 
 
 def image_load(path, size=(TILE, TILE), alpha=True):
@@ -10,3 +11,8 @@ def image_load(path, size=(TILE, TILE), alpha=True):
     else:
         image = image.convert()
     return image
+
+
+def get_percentages(mul):
+    if randint(0, 100) < mul:
+        return True

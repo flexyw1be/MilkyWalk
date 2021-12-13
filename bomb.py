@@ -21,10 +21,10 @@ class Bomb(pygame.sprite.Sprite):
         self.animation_set = [image_load(f"data/boom{i}.png") for i in range(0, 2)]
         self.current_time = 0
         self.i = 0
-        self.radius = 3 * TILE
+        self.radius = TILE * 3
         self.boom = False
 
-    def update(self, enemies, bullets, blocks, screen):
+    def update(self, heroes, bullets, blocks, screen):
         collided_blocks = pygame.sprite.spritecollide(self, bullets, False)
         pygame.draw.circle(screen, 'black', (self.rect.centerx, self.rect.centery), self.radius, 3)
         for i in collided_blocks:
@@ -46,9 +46,10 @@ class Bomb(pygame.sprite.Sprite):
             for i in blocks:
                 if pygame.sprite.collide_circle(self, i):
                     i.set_hp(i.get_hp() - BOMB_DMG)
-            for i in enemies:
+            for i in heroes:
                 if pygame.sprite.collide_circle(self, i):
                     i.get_dmg(BOMB_DMG)
+
 
         if time.time() - self.current_time > 0.5 and self.boom:
             self.kill()
