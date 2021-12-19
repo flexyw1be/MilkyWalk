@@ -1,4 +1,5 @@
 import pygame
+from config import *
 from utilities import *
 from player import Player
 from enemy import Enemy
@@ -74,10 +75,7 @@ class Window:
                         self.running = False
 
             self.screen.blit(self.back, (0, 0))
-            map = self.map
-            if map != self.player.map:
-                self.map = self.player.map
-                self.load_map(self.map)
+
             if self.player.get_hp() > 0:
                 self.hp_hud = image_load(self.hp_images[f'{self.player.get_hp()}hp'], (TILE * 4, TILE))
             for i in self.enemies:
@@ -86,7 +84,7 @@ class Window:
             #     i.add(self.heroes)
             self.set_bullet_group()
             self.set_bombs_group()
-            self.all_blocks, self.enemies, self.bosses = self.map_sprites[self.map]
+            self.all_blocks, self.enemies, self.bosses = self.map_sprites[self.player.map]
             self.player.update(self.all_blocks, self.buffs)
             self.enemies.update(self.player, self.player_group, self.all_blocks, self.buffs, self.screen)
             self.bosses.update(self.player, self.bullet_group, self.all_blocks, self.screen)
@@ -109,6 +107,7 @@ class Window:
                 pygame.draw.rect(self.screen, 'black', (i.rect.x, i.rect.y - 20, TILE, 10), 2)
             self.bosses.draw(self.screen)
             self.draw_map()
+
 
             self.clock.tick(FPS)
             pygame.display.flip()

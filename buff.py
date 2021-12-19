@@ -20,7 +20,10 @@ class Buff(pygame.sprite.Sprite):
     def update(self, player):
         if pygame.sprite.collide_rect(self, player):
             if player.get_hp() == 100 and self.hp_boost > 0:
-                pass
+                if player.vx > 0:
+                    self.rect.left = player.rect.right
+                if player.vx < 0:
+                    self.rect.right = player.rect.left
             else:
                 player.set_hp(self.hp_boost)
                 self.kill()
@@ -30,6 +33,13 @@ class Buff(pygame.sprite.Sprite):
                 player.set_key()
             if self.name == 'coin':
                 player.set_money(1)
+        if pygame.sprite.collide_rect(self, player):
+            if player.vy > 0:
+                self.rect.top = player.rect.bottom
+            elif player.vy < 0:
+                self.rect.bottom = player.rect.top
+        if self.rect.left < GAME_SIZE.left + TILE:
+            self.rect.left = GAME_SIZE.left + TILE
         if self.anim_count >= len(self.images[f'{self.name}']) * ANIM_SPEED:
             self.anim_count = 0
         self.image = self.images[f'{self.name}'][self.anim_count // ANIM_SPEED]

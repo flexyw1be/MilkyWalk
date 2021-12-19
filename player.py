@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
             'idle': [image_load(f'data/player_idle{i}.png', PLAYER_SIZE) for i in range(1, 4)],
             'left': [image_load(f'data/player_l{i}.png', PLAYER_SIZE) for i in range(1, 4)],
             'up': [image_load(f'data/player_up{i}.png', PLAYER_SIZE) for i in range(1, 4)],
+            'damage': {'up': ['data/player_up1.png']}
         }
 
         self.images[f'right'] = [pygame.transform.flip(img, True, False)
@@ -73,7 +74,6 @@ class Player(pygame.sprite.Sprite):
                         map_x, map_y = x, y
                         break
             # map = map_x[map_x.index(map_y) - 1]
-            print(map_x.index(map_y))
             if map_x.index(map_y) > 0:
                 if map_x[map_x.index(map_y) - 1] != 0:
                     self.map = map_x[map_x.index(map_y) - 1]
@@ -141,7 +141,7 @@ class Player(pygame.sprite.Sprite):
                         map_x, map_y = x, y
                         break
             if ROOM_LIST.index(map_x) > 0:
-                if ROOM_LIST[ROOM_LIST.index(map_x) -1][map_x.index(map_y)] !=0:
+                if ROOM_LIST[ROOM_LIST.index(map_x) - 1][map_x.index(map_y)] != 0:
                     self.map = ROOM_LIST[ROOM_LIST.index(map_x) - 1][map_x.index(map_y)]
                     self.rect.bottom = GAME_SIZE.bottom - TILE
                 else:
@@ -158,7 +158,7 @@ class Player(pygame.sprite.Sprite):
             if ROOM_LIST.index(map_x) > 0:
                 if ROOM_LIST[ROOM_LIST.index(map_x) + 1][map_x.index(map_y)] != 0:
                     self.map = ROOM_LIST[ROOM_LIST.index(map_x) + 1][map_x.index(map_y)]
-                    self.rect.top = GAME_SIZE.top +TILE
+                    self.rect.top = GAME_SIZE.top + TILE
                 else:
                     self.rect.bottom = GAME_SIZE.bottom - TILE
             else:
@@ -241,3 +241,6 @@ class Player(pygame.sprite.Sprite):
 
     def set_radius(self, radius):
         self.radius = radius
+
+    def get_map(self):
+        return self.map

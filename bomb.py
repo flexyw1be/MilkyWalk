@@ -1,7 +1,6 @@
 import pygame
 from config import *
 from utilities import *
-from check_bomb import CheckBomb
 from random import choice
 import time
 

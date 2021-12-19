@@ -7,7 +7,7 @@ GAME_SIZE = pygame.Rect(TILE, TILE, TILE * 18, TILE * 12)
 
 BACKGROUND = 'data/back.png'
 PLAYER_IDLE = 'data/player.png'
-ENEMY_IDLE = 'data/spider.png'
+ENEMY_IDLE = 'data/mushroom_idle.png'
 ENEMY_DMG = 25
 ENEMY_HP = 100
 ENEMY_SPEED = 1
